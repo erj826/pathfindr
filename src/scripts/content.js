@@ -8,40 +8,38 @@ function installHook() {
   let __ReactSightFiberDOM;
 
   function createComponentRecursively(node, parents) {
-    console.log('in create recursive')
     const newComponent = {
-      name: '',
-      children: [],
-      state: null,
+      // name: '',
+      // children: [],
+      // state: null,
       props: null,
-      id: null,
-      isDOM: null,
+      // id: null,
+      // isDOM: null,
     };
 
-    console.log(node);
-
     if (node.type) {
-      if (node.type.name) {
-        newComponent.name = node.type.name;
-        newComponent.isDOM = false;
-      }
-      else {
-        newComponent.name = node.type;
-        newComponent.isDOM = true;
+      // if (node.type.name) {
+      //   newComponent.name = node.type.name;
+      //   newComponent.isDOM = false;
+      // }
+      // else {
+      //   newComponent.name = node.type;
+      //   newComponent.isDOM = true;
+      // }
+      if (node.type.propTypes) {
+        newComponent.props = Object.keys(node.type.propTypes)
       }
     }
-    newComponent.children = [];
-    console.log(newComponent);
-    parentArr.push(newComponent);
-    if (node.child != null) createComponentRecursively(node.child, newComponent.children);
-    if (node.sibling != null) createComponentRecursively(node.sibling, parents);
+    // only add if props were found
+    if (newComponent.props) parents.push(newComponent);
+    if (node.child != null) createComponentRecursively(node.child, parents);
+    // if (node.sibling != null) createComponentRecursively(node.sibling, parents);
   }
 
   function componentTreeCreator(node) {
     const components = [];
-    console.log(node);
-    // createComponentRecursively(node.current.stateNode.current)
-    // console.log(components)
+    createComponentRecursively(node.current.child, components)
+    console.log(components)
   }
   if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
     const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
