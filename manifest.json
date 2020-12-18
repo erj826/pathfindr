@@ -3,16 +3,16 @@
   "name": "pathfindr",
   "description": "Google Chrome Dev Tools extension used to visualize the DOM tree",
   "version": "1.0",
-  "permissions": [
-    "*://*/*"
-  ],
+  "permissions": ["*://*/*", "tabs"],
   "devtools_page": "devtools.html",
   "background": {
     "persistent": true,
     "scripts": ["background.js"]
   },
-  "content_scripts": [{
+  "content_scripts": [
+    {
       "matches": ["<all_urls>"],
-      "js":      ["content.js"]
-  }]
+      "js": ["content.js"]
+    }
+  ]
 }

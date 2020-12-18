@@ -19,12 +19,12 @@ gulp.task("build:app", (done) => {
 
 /* COPY FILES INTO BUILD FOLDER */
 const files = [
-  './manifest.json',
-  './src/index.html',
-  './src/devtools/devtools.html',
-  './src/devtools/devtools.js',
-  './src/scripts/background.js',
-  './src/scripts/content.js'
+  "./manifest.json",
+  "./src/index.html",
+  "./src/devtools/devtools.html",
+  "./src/devtools/devtools.js",
+  "./src/scripts/background.js",
+  "./src/scripts/content.js",
 ];
 gulp.task("copy:static", (done) => {
   gulp.src(files).pipe(gulp.dest(paths.build)).on("end", done);
