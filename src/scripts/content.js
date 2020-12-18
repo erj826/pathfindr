@@ -18,7 +18,6 @@ getReactInfo = () => {
   let __ReactSight_ReactVersion;
   if (!pathfindrHasRun) {
     if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'object') {
-      console.log(window)
       console.warn('[Pathfindr]: Pathfindr requires React Dev Tools to be installed.');
     } else { 
       const reactInstances = window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers || null;
@@ -46,14 +45,14 @@ getReactInfo = () => {
         } else console.log('[Pathfindr] React not found');
       })()
     }
+    if (instance) {
+      window.addEventListener('pathfindr', () => {
+        console.log('get data here')
+        console.log(instance)
+      });
+    }
+    pathfindrHasRun = true;
   }
-  if (instance) {
-    window.addEventListener('pathfindr', () => {
-      console.log('get data here')
-      console.log(instance)
-    });
-  }
-  pathfindrHasRun = true;
 }
 
 // Listening for events emitted from user's application *window.postMessage()*
