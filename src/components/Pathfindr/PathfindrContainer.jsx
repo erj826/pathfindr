@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 
 const PathfindrContainer = () => {
@@ -9,7 +10,7 @@ const PathfindrContainer = () => {
     chrome.tabs.getSelected(null, function (tab) {
       chrome.tabs.sendRequest(
         tab.id,
-        { action: "getDOM" },
+        { action: "fetchDOM" },
         function (response) {
           setDomContent(response.dom);
         }
@@ -18,12 +19,14 @@ const PathfindrContainer = () => {
   };
 
   return (
-    <Box textAlign="center">
-      <Typography color="primary" variant="h3" gutterBottom component="h3">
+    <Box textAlign="center" color="primary">
+      <Typography variant="h3" gutterBottom>
         Pathfindr
       </Typography>
-      <button onClick={() => getContent()}>Click here</button>
-      <h5>{domContent}</h5>
+      <Button onClick={() => getContent()} variant="contained">
+        Click here
+      </Button>
+      <Typography variant="h3">{domContent}</Typography>
     </Box>
   );
 };
