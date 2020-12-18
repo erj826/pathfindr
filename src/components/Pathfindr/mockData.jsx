@@ -1,0 +1,35 @@
+export const nodeRootMock = {
+    id: 0,
+    idDOM: false,
+    name: 'A',
+    state: null,
+    props: null,
+    ref: null,
+    key: null,
+    children: [{
+        id: 1,
+        idDOM: false,
+        name: 'B',
+        state: null,
+        props: null,
+        ref: null,
+        key: null,
+        children: [{
+            id: 2,
+            idDOM: false,
+            name: 'BA',
+            state: null,
+            props: null,
+            ref: null,
+            key: null,
+        }]
+    }, {
+        id: 3,
+        idDOM: false,
+        name: 'C',
+        state: null,
+        props: null,
+        ref: null,
+        key: null,
+    }],
+}

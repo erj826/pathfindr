@@ -24,7 +24,9 @@ const files = [
   './src/devtools/devtools.html',
   './src/devtools/devtools.js',
   './src/scripts/background.js',
-  './src/scripts/content.js'
+  './src/scripts/content.js',
+  './src/components/Pathfindr/tree.jsx',
+  './src/components/Pathfindr/mockData.jsx',
 ];
 gulp.task("copy:static", (done) => {
   gulp.src(files).pipe(gulp.dest(paths.build)).on("end", done);
