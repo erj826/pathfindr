@@ -5,13 +5,25 @@ setTimeout(() => {
 }, 5000);
 
 function installHook() {
+  let __ReactSightFiberDOM;
   if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
-    console.log('found react dev tools')
+    const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
     const reactInstances = window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers || null;
     const instance = reactInstances.get(1);
-    // const reactRoot = window.document.body.childNodes;
-    const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-    console.log(instance)
+
+    // onCommitFiberRoot
+    devTools.onCommitFiberRoot = (function (original) {
+      return function (...args) {
+        __ReactSightFiberDOM = args[1];
+        console.log('DOM: ', __ReactSightFiberDOM);
+        traverse16(__ReactSightFiberDOM);
+        return original(...args);
+      };
+    })(devTools.onCommitFiberRoot);
+  
+    // This will print like an infinite # of components to console.
+    console.log(devTools.onCommitFiberRoot());
+
   } else {
     console.log('sadly didnt find react dev tools')
   }
