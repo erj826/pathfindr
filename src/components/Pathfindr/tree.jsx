@@ -28,7 +28,10 @@ export default Tree = ({data}) => {
         const hLink = linkHorizontal().x(link => link.y).y(link => link.x);
 
         const gLink = svg.append("g")
-            .attr("fill", "white");
+            .attr("fill", "none")
+            .attr("stroke", "white")
+            .attr("stroke-opacity", 0.4)
+            .attr("stroke-width", 1.2);
 
         const gNode = svg.append("g")
             .attr("cursor", "pointer")
