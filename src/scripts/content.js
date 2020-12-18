@@ -14,15 +14,57 @@ function injectScript(func, node) {
 }
 
 getReactInfo = () => {
-  if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__) console.warn('[Pathfindr]: Pathfindr requires React Dev Tools to be installed.');
-  const reactInstances = window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers || null;
-  const instance = reactInstances.get(1);
-  // const reactRoot = window.document.body.childNodes;
-  const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-
-  console.log(instance)
-  console.log(devTools)
+  let pathfindrHasRun = false; // memoize installing the hook
+  let __ReactSight_ReactVersion;
+  if (!pathfindrHasRun) {
+    if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+      console.warn('[Pathfindr]: Pathfindr requires React Dev Tools to be installed.');
+    } else { 
+      const reactInstances = window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers || null;
+      const instance = reactInstances.get(1);
+      // const reactRoot = window.document.body.childNodes;
+      const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    
+      (function installHook() {
+        // no instance of React detected
+        if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+          console.log('Error: React DevTools not present. React Sight uses React DevTools to patch React\'s reconciler');
+          return;
+        }
+        if (instance && instance.version) {
+          __ReactSight_ReactVersion = instance.version;
+          // onCommitFiberRoot
+          devTools.onCommitFiberRoot = (function (original) {
+            return function (...args) {
+              __ReactSightFiberDOM = args[1];
+              if (__ReactSightDebugMode) console.log('DOM: ', __ReactSightFiberDOM);
+              // traverse16(__ReactSightFiberDOM);
+              // return original(...args);
+            };
+          })(devTools.onCommitFiberRoot);
+        } else console.log('[Pathfindr] React not found');
+      })
+    }
+  }
+  if (instance) {
+    window.addEventListener('pathfindr', () => {
+      console.log('get data here')
+      console.log(instance)
+    });
+  }
+  pathfindrHasRun = true;
 }
+
+// Listening for events emitted from user's application *window.postMessage()*
+window.addEventListener('message', (e) => {
+  if (e.source !== window) return;
+  // send message to background
+  chrome.runtime.sendMessage(e.data, () => {
+    if (typeof e.data === 'object') {
+      // console.log('**Content-scripts** received data sending to devtools...', e.data);
+    }
+  });
+});
 
 chrome.runtime.onMessage.addListener(() => {
   const newEvent = new Event('Pathfindr');
